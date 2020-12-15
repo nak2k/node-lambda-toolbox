@@ -1,3 +1,5 @@
+import { APIGatewayProxyEventV2 } from 'aws-lambda';
+
 export interface EventHeaders {
   [name: string]: string;
 }
@@ -6,7 +8,7 @@ export interface ResultHeaders {
   [name: string]: boolean | number | string;
 }
 
-export function isPayloadV2(event: any) {
+export function isPayloadV2(event: any): event is APIGatewayProxyEventV2 {
   return event.version === '2.0';
 }
 
