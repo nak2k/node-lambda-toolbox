@@ -8,10 +8,6 @@ export interface ResultHeaders {
   [name: string]: boolean | number | string;
 }
 
-export function isPayloadV2(event: any): event is APIGatewayProxyEventV2 {
-  return event.version === '2.0';
-}
-
 export function matchMediaType(type: string, patterns: string[]) {
   return patterns.find(pattern => mediaTypeMatcher(pattern)(type)) !== undefined;
 }
