@@ -89,13 +89,13 @@ export function toEventV2(event: any): APIGatewayProxyEventV2 {
       time: requestContext.requestTime || '',
       timeEpoch: requestContext.requestTimeEpoch,
     },
-    body: nullToUndefinied(body),
-    pathParameters: nullToUndefinied(pathParameters),
+    body: nullToUndefined(body),
+    pathParameters: nullToUndefined(pathParameters),
     isBase64Encoded,
-    stageVariables: nullToUndefinied(stageVariables),
+    stageVariables: nullToUndefined(stageVariables),
   };
 }
 
-function nullToUndefinied<T>(v: T | null): T | undefined {
+function nullToUndefined<T>(v: T | null): T | undefined {
   return v === null ? undefined : v;
 }
