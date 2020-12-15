@@ -4,6 +4,7 @@ export * from 'lambda-url-resolver';
 export * from './cookie';
 export * from './headers';
 export * from './json';
+export * from './jwtAuthorizer';
 export * from './payload';
 export * from './results';
 export * from './router';
