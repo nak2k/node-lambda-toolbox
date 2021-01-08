@@ -1,7 +1,6 @@
 import jwt = require('jsonwebtoken');
 import jwksRsa = require('jwks-rsa');
 import { findCookie } from './cookie';
-import { EventHeaders } from './util';
 import { isPayloadV2 } from './payload';
 
 export interface AuthorizedResult<T> {
@@ -12,6 +11,10 @@ export interface AuthorizedResult<T> {
 interface AuthorizerEvent {
   headers: EventHeaders;
   cookies?: string[];
+}
+
+export interface EventHeaders {
+  [name: string]: string | undefined;
 }
 
 export type Authorizer<T> = (event: AuthorizerEvent) => Promise<AuthorizedResult<T> | undefined>;

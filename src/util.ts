@@ -1,13 +1,3 @@
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
-
-export interface EventHeaders {
-  [name: string]: string;
-}
-
-export interface ResultHeaders {
-  [name: string]: boolean | number | string;
-}
-
 export function matchMediaType(type: string, patterns: string[]) {
   return patterns.find(pattern => mediaTypeMatcher(pattern)(type)) !== undefined;
 }
