@@ -31,17 +31,30 @@ export function toEventV2(event: any): APIGatewayProxyEventV2 {
   } = event;
 
   const rawQueryString = Object.entries(multiValueQueryStringParameters || []).flatMap(([name, values]) => {
+    if (!values) {
+      return `${name}=`;
+    }
+
     return values.map(value => {
       return `${name}=${encodeURIComponent(value)}`;
     });
   }).join('&');
 
   const queryStringParameters = Object.fromEntries(Object.entries(multiValueQueryStringParameters || []).map(([name, values]) => {
+    if (!values) {
+      return [name];
+    }
+
     return [name, values.join(',')];
   }));
 
   const headers = Object.entries(multiValueHeaders || []).reduce((result, [name, values]) => {
     name = name.toLowerCase();
+
+    if (!values) {
+      result[name] = undefined;
+      return result;
+    }
 
     if (result[name]) {
       result[name] += ',' + values.join(',');
@@ -55,6 +68,10 @@ export function toEventV2(event: any): APIGatewayProxyEventV2 {
   const cookies = Object.entries(multiValueHeaders || []).flatMap(([name, values]) => {
     if (name.toLowerCase() !== 'cookie') {
       return [];
+    }
+
+    if (!values) {
+      return [`${name}=`];
     }
 
     return values.flatMap(value => {

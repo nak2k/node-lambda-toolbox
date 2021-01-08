@@ -23,7 +23,7 @@ interface Route<Event, Result> {
 
 interface RouterBaseEvent {
   rawPath: string;
-  pathParameters?: { [name: string]: string };
+  pathParameters?: { [name: string]: string | undefined };
   requestContext: {
     http: {
       method: string;
