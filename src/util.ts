@@ -1,3 +1,5 @@
+export const LOCAL = process.env.AWS_SAM_LOCAL === 'true';
+
 export function matchMediaType(type: string, patterns: string[]) {
   return patterns.find(pattern => mediaTypeMatcher(pattern)(type)) !== undefined;
 }
