@@ -91,6 +91,7 @@ export function toEventV2(event: any): APIGatewayProxyEventV2 {
     requestContext: {
       accountId: requestContext.accountId,
       apiId: requestContext.apiId,
+      authorizer: toEventV2Authorizer(requestContext.authorizer),
       domainName: requestContext.domainName || '',
       domainPrefix: requestContext.domainPrefix || '',
       http: {
@@ -110,6 +111,19 @@ export function toEventV2(event: any): APIGatewayProxyEventV2 {
     pathParameters: nullToUndefined(pathParameters),
     isBase64Encoded,
     stageVariables: nullToUndefined(stageVariables),
+  };
+}
+
+function toEventV2Authorizer(authorizer: any) {
+  if (!authorizer || !authorizer.claims) {
+    return undefined;
+  }
+
+  return {
+    jwt: {
+      claims: authorizer.claims,
+      scopes: authorizer.scopes,
+    },
   };
 }
 
