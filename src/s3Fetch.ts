@@ -18,21 +18,21 @@ interface S3FetchOptions {
   /**
    * The key to be the base point on the S3 bucket to be rendered.
    * 
-   * Default: ''
+   * @default ''
    */
   key?: string;
 
   /**
    * The base path that serves static files.
    * 
-   * Default: '/'
+   * @default '/'
    */
   basePath?: string;
 
   /**
    * Media types that assume files as text.
    * 
-   * Defaul:t: ['text/*', 'application/json']
+   * @default ['text/*', 'application/json', 'application/javascript']
    */
   textMediaTypes?: string[];
 
@@ -60,7 +60,7 @@ export async function s3Fetch(event: APIGatewayProxyEventV2, options: S3FetchOpt
     bucket,
     key = '',
     basePath = '/',
-    textMediaTypes = ['text/*', 'application/json'],
+    textMediaTypes = ['text/*', 'application/json', 'application/javascript'],
     root,
   } = options;
 
