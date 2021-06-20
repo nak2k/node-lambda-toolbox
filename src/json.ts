@@ -1,10 +1,17 @@
 import { APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
 
-export function getJsonBody<T = any>(event: { body?: string }): T | undefined {
-  const { body } = event;
+export function getJsonBody<T = any>(event: {
+  body?: string;
+  isBase64Encoded?: boolean;
+}): T | undefined {
+  let { body } = event;
 
   if (!body) {
     return;
+  }
+
+  if (event.isBase64Encoded) {
+    body = Buffer.from(body, 'base64').toString();
   }
 
   try {
