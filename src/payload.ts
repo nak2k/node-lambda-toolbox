@@ -1,4 +1,4 @@
-import type { APIGatewayProxyEvent, APIGatewayProxyEventHeaders, APIGatewayProxyEventV2 } from 'aws-lambda';
+import type { APIGatewayProxyEvent, APIGatewayProxyEventHeaders, APIGatewayProxyEventV2, APIGatewayTokenAuthorizerEvent } from 'aws-lambda';
 import { parse } from 'cookie';
 
 export function isPayloadV1(event: any): event is APIGatewayProxyEvent {
@@ -7,6 +7,10 @@ export function isPayloadV1(event: any): event is APIGatewayProxyEvent {
 
 export function isPayloadV2(event: any): event is APIGatewayProxyEventV2 {
   return event.version === '2.0';
+}
+
+export function isTokenAuthorizerPayload(event: any): event is APIGatewayTokenAuthorizerEvent {
+  return event.type === "TOKEN" && event.methodArn;
 }
 
 export function toEventV2(event: any): APIGatewayProxyEventV2 {
