@@ -1,5 +1,13 @@
 import { APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
 
+/**
+ * Parse the body of the event as JSON.
+ * 
+ * If the body is base64-encoded, decode it too.
+ * 
+ * @param event 
+ * @returns 
+ */
 export function getJsonBody<T = any>(event: {
   body?: string;
   isBase64Encoded?: boolean;
@@ -21,6 +29,13 @@ export function getJsonBody<T = any>(event: {
   }
 }
 
+/**
+ * Generate the result that has body and headers for JSON.
+ * 
+ * @param body Any value that is converted to JSON string.
+ * @param statusCode 
+ * @returns 
+ */
 export function resultJson(body: any, statusCode: number = 200): APIGatewayProxyStructuredResultV2 {
   return {
     statusCode,
