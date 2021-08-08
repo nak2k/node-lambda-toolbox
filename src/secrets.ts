@@ -10,9 +10,20 @@ export interface DatabaseSecret {
 }
 
 export interface GetDatabaseSecretOptions {
+  /**
+   * The secret of SecretsManager to connect the database.
+   * 
+   * @default `process.env.DATABASE_SECRET_ARN`
+   */
   secretId?: string;
 }
 
+/**
+ * Get the configuration to connect the database from SecretsManager.
+ * 
+ * @param options 
+ * @returns 
+ */
 export async function getDatabaseSecret(options: GetDatabaseSecretOptions): Promise<DatabaseSecret> {
   const {
     secretId = process.env.DATABASE_SECRET_ARN,
