@@ -1,14 +1,36 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
-import { } from "lambda-toolbox";
+import { APIGatewayProxyEvent } from "aws-lambda";
+import {
+  isPayloadV2,
+  toEventV2,
+  defineRouter,
+  cognitoAuthorizer,
+  resultNotFound,
+  resultBadRequest,
+} from "lambda-toolbox";
 
-export async function handler(event: APIGatewayProxyEvent, context: any): Promise<APIGatewayProxyResult> {
+const router = defineRouter()
+  .post("/authorizer", async (event, context) => {
+    const authorizedResult = await cognitoAuthorizer()(event);
+
+    if (authorizedResult === undefined) {
+      return resultBadRequest;
+    }
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(authorizedResult.decodedAccessToken),
+    };
+  })
+  .build();
+
+export async function handler(event: APIGatewayProxyEvent, context: any) {
   console.log('Event: %j', event);
 
-  return {
-    statusCode: 200,
-    headers: {
-      'content-type': 'text/plain',
-    },
-    body: 'hello',
-  };
+  const eventV2 = isPayloadV2(event) ? event : toEventV2(event);
+
+  const result = await router(eventV2, context);
+
+  console.log('Result: %j', result);
+
+  return result ?? resultNotFound;
 }
