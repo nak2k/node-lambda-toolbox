@@ -9,7 +9,7 @@ import {
 } from "lambda-toolbox";
 
 const router = defineRouter()
-  .post("/authorizer", async (event, context) => {
+  .post("/prod/authorizer", async (event, context) => {
     const authorizedResult = await cognitoAuthorizer()(event);
 
     if (authorizedResult === undefined) {
@@ -27,6 +27,8 @@ export async function handler(event: APIGatewayProxyEvent, context: any) {
   console.log('Event: %j', event);
 
   const eventV2 = isPayloadV2(event) ? event : toEventV2(event);
+
+  console.log('EventV2: %j', eventV2);
 
   const result = await router(eventV2, context);
 

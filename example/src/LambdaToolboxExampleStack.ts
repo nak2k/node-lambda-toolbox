@@ -2,13 +2,14 @@ import { Construct } from "@aws-cdk/core";
 import { DefaultEnvStack } from "@cdk-util/core";
 import { LambdaRestApi } from "@aws-cdk/aws-apigateway";
 import { NodejsFunction } from "@cdk-util/aws-lambda";
-import { UserPool } from '@aws-cdk/aws-cognito';
+import { UserPool, UserPoolClient } from '@aws-cdk/aws-cognito';
 import { CognitoUserPoolUser } from "@cdk-util/aws-cognito";
 import {
   COGNITO_USER_ID,
   SSM_PARAM_COGNITO_USER_PASSWORD,
   SSM_PARAM_API_ENDPOINT,
   SSM_PARAM_COGNITO_USER_POOL_ID,
+  SSM_PARAM_COGNITO_WEB_CLIENT_ID,
 } from "./constants";
 
 export class LambdaToolboxExampleStack extends DefaultEnvStack {
@@ -27,6 +28,14 @@ export class LambdaToolboxExampleStack extends DefaultEnvStack {
       autoVerify: {
         email: true,
         phone: false,
+      },
+    });
+
+    const webClient = new UserPoolClient(this, "webClient", {
+      userPool,
+      userPoolClientName: "WebClient",
+      authFlows: {
+        userSrp: true,
       },
     });
 
@@ -59,6 +68,10 @@ export class LambdaToolboxExampleStack extends DefaultEnvStack {
       userPoolIdParameter: {
         parameterName: SSM_PARAM_COGNITO_USER_POOL_ID,
         stringValue: userPool.userPoolId,
+      },
+      webClientIdParameter: {
+        parameterName: SSM_PARAM_COGNITO_WEB_CLIENT_ID,
+        stringValue: webClient.userPoolClientId,
       },
     });
   }
