@@ -4,12 +4,12 @@ import { LambdaRestApi } from "@aws-cdk/aws-apigateway";
 import { NodejsFunction } from "@cdk-util/aws-lambda";
 import { UserPool } from '@aws-cdk/aws-cognito';
 import { CognitoUserPoolUser } from "@cdk-util/aws-cognito";
-
-export const COGNITO_USER_ID = "test";
-
-export const SSM_PARAM_API_ENDPOINT = "/LambdaToolboxExampleStack/apiEndpoint";
-export const SSM_PARAM_COGNITO_USER_POOL_ID = "/LambdaToolboxExampleStack/cognitoUserPoolId";
-export const SSM_PARAM_COGNITO_USER_USER_PASSWORD = "/LambdaToolboxExampleStack/cognitoUserPassword";
+import {
+  COGNITO_USER_ID,
+  SSM_PARAM_COGNITO_USER_PASSWORD,
+  SSM_PARAM_API_ENDPOINT,
+  SSM_PARAM_COGNITO_USER_POOL_ID,
+} from "./constants";
 
 export class LambdaToolboxExampleStack extends DefaultEnvStack {
   constructor(scope: Construct, id: string) {
@@ -34,7 +34,7 @@ export class LambdaToolboxExampleStack extends DefaultEnvStack {
       userPool,
       username: COGNITO_USER_ID,
       passwordStore: "ssm",
-      passwordParameterName: SSM_PARAM_COGNITO_USER_USER_PASSWORD,
+      passwordParameterName: SSM_PARAM_COGNITO_USER_PASSWORD,
       providerOnly: false,
     });
 
