@@ -5,9 +5,6 @@
   "description": "lambda-toolbox example",
   "author": "Kengo Nakatsuka <kengo.nakatsuka@gmail.com>",
   "main": "dist",
-  "dependencies": {
-    "lambda-toolbox": "file:../../lambda-toolbox-0.1.11.tgz"
-  },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.62",
     "@types/node": "^16.4.0",
@@ -28,5 +25,8 @@
     "dependencies": {
       "lambda-toolbox": "../.."
     }
+  },
+  "dependencies": {
+    "lambda-toolbox": "file:../../lambda-toolbox-0.1.11.tgz"
   }
 }
