@@ -10,6 +10,7 @@
     "content-type": "^1.0.4",
     "cookie": "^0.4.1",
     "env-src": "^0.2.1",
+    "err-to-slack": "^0.3.0",
     "init-stage": "^0.1.0",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^2.0.4",
@@ -46,7 +47,7 @@
   "scripts": {
     "build": "tsc",
     "clean": "rimraf lib",
-    "prepublishOnly": "npm test",
+    "prepare": "npm test",
     "postpublish": "npm-sns",
     "pretest": "run-s clean build",
     "test": "tape test/test*.js"

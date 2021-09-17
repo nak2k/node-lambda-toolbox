@@ -51,6 +51,8 @@ export class LambdaToolboxExampleStack extends DefaultEnvStack {
       packageDirectory: "lambda",
       environment: {
         USER_POOL_ID: userPool.userPoolId,
+        SLACK_CHANNEL: process.env.SLACK_CHANNEL || "",
+        SLACK_INCOMING_WEBHOOK_URL: process.env.SLACK_INCOMING_WEBHOOK_URL || "",
       },
     });
 
