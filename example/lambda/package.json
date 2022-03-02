@@ -27,6 +27,6 @@
     }
   },
   "dependencies": {
-    "lambda-toolbox": "file:../../lambda-toolbox-0.1.11.tgz"
+    "lambda-toolbox": "file:../../lambda-toolbox-0.1.12.tgz"
   }
 }
