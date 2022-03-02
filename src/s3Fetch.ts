@@ -100,7 +100,7 @@ export async function s3Fetch(event: APIGatewayProxyEventV2, options: S3FetchOpt
 
   try {
     data = await s3.getObject(params).promise();
-  } catch (err) {
+  } catch (err: any) {
     if (err.statusCode === 304) {
       /*
        * Make for the client to use cache.

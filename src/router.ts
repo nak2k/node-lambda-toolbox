@@ -53,7 +53,7 @@ class Router<Event extends RouterBaseEvent, Result> {
 
     try {
       re = pathToRegexp(path, keys);
-    } catch (err) {
+    } catch (err: any) {
       throw new Error(`Failed to add route for ${method} ${path} (Cause: ${err.message})`);
     }
 

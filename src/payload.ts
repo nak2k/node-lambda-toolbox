@@ -1,4 +1,10 @@
-import type { APIGatewayProxyEvent, APIGatewayProxyEventHeaders, APIGatewayProxyEventV2, APIGatewayTokenAuthorizerEvent } from 'aws-lambda';
+import type {
+  APIGatewayProxyEvent,
+  APIGatewayProxyEventHeaders,
+  APIGatewayProxyEventV2,
+  APIGatewayProxyEventV2WithJWTAuthorizer,
+  APIGatewayTokenAuthorizerEvent,
+} from 'aws-lambda';
 import { parse } from 'cookie';
 
 export function isPayloadV1(event: any): event is APIGatewayProxyEvent {
@@ -115,7 +121,7 @@ export function toEventV2(event: any): APIGatewayProxyEventV2 {
     pathParameters: nullToUndefined(pathParameters),
     isBase64Encoded,
     stageVariables: nullToUndefined(stageVariables),
-  };
+  } as APIGatewayProxyEventV2WithJWTAuthorizer;
 }
 
 function toEventV2Authorizer(authorizer: any) {
