@@ -36,7 +36,7 @@ export function getJsonBody<T = any>(event: {
  * @param statusCode 
  * @returns 
  */
-export function resultJson(body: any, statusCode: number = 200): APIGatewayProxyStructuredResultV2 {
+export function resultJson<T = any>(body: T, statusCode: number = 200): APIGatewayProxyStructuredResultV2 {
   return {
     statusCode,
     headers: {
