@@ -60,6 +60,7 @@ export class LambdaToolboxExampleStack extends DefaultEnvStack {
       restApiName: `lambdatoolbox-example`,
       binaryMediaTypes: ["image/*", "audio/*", "video/*"],
       handler,
+      cloudWatchRole: false,
     });
 
     this.createStringParameters({
