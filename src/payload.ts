@@ -4,8 +4,13 @@ import type {
   APIGatewayProxyEventV2,
   APIGatewayProxyEventV2WithJWTAuthorizer,
   APIGatewayTokenAuthorizerEvent,
+  DynamoDBStreamEvent,
 } from 'aws-lambda';
 import { parse } from 'cookie';
+
+export function isDynamoDBStreamEvent(event: any): event is DynamoDBStreamEvent {
+  return event?.Records?.[0]?.eventSource === "aws:dynamodb";
+}
 
 export function isPayloadV1(event: any): event is APIGatewayProxyEvent {
   return event.version === undefined || event.version === '1.0';
