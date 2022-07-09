@@ -1,6 +1,7 @@
 export * from 'env-src';
 export * from 'init-stage';
 export * from 'lambda-url-resolver';
+export * from "./body";
 export * from './cookie';
 export * from './errToSlack';
 export * from './headers';
