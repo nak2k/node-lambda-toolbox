@@ -1,15 +1,10 @@
-import { Construct } from "@aws-cdk/core";
-import { DefaultEnvStack } from "@cdk-util/core";
-import { LambdaRestApi } from "@aws-cdk/aws-apigateway";
-import { NodejsFunction } from "@cdk-util/aws-lambda";
-import { UserPool, UserPoolClient } from '@aws-cdk/aws-cognito';
-import { CognitoUserPoolUser } from "@cdk-util/aws-cognito";
+import { LambdaRestApi } from "aws-cdk-lib/aws-apigateway";
+import { UserPool, UserPoolClient } from 'aws-cdk-lib/aws-cognito';
+import { CognitoUserPoolUser, DefaultEnvStack, NodejsFunction } from "aws-cdk-util";
+import { Construct } from "constructs";
 import {
-  COGNITO_USER_ID,
-  SSM_PARAM_COGNITO_USER_PASSWORD,
-  SSM_PARAM_API_ENDPOINT,
-  SSM_PARAM_COGNITO_USER_POOL_ID,
-  SSM_PARAM_COGNITO_WEB_CLIENT_ID,
+  COGNITO_USER_ID, SSM_PARAM_API_ENDPOINT, SSM_PARAM_COGNITO_USER_PASSWORD, SSM_PARAM_COGNITO_USER_POOL_ID,
+  SSM_PARAM_COGNITO_WEB_CLIENT_ID
 } from "./constants";
 
 export class LambdaToolboxExampleStack extends DefaultEnvStack {
