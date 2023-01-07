@@ -1,8 +1,7 @@
 import { URL } from 'url';
 import { join, relative } from 'path';
 import { APIGatewayProxyEventV2, APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
-import { S3 } from 'aws-sdk';
-import { GetObjectOutput } from 'aws-sdk/clients/s3';
+import { GetObjectCommandOutput, S3, S3ServiceException } from '@aws-sdk/client-s3';
 import { matchMediaType } from './util';
 import { parse } from 'content-type';
 import { serveStatic } from './serveStatic';
@@ -88,7 +87,7 @@ export async function s3Fetch(event: APIGatewayProxyEventV2, options: S3FetchOpt
     return;
   }
 
-  const s3 = new S3();
+  const s3 = new S3({});
 
   const params = {
     Bucket: bucket,
@@ -96,23 +95,27 @@ export async function s3Fetch(event: APIGatewayProxyEventV2, options: S3FetchOpt
     IfNoneMatch: event.headers['if-none-match'],
   };
 
-  let data: GetObjectOutput;
+  let data: GetObjectCommandOutput;
 
   try {
-    data = await s3.getObject(params).promise();
-  } catch (err: any) {
-    if (err.statusCode === 304) {
-      /*
-       * Make for the client to use cache.
-       */
-      return {
-        statusCode: 304,
-        headers: {},
-      };
-    }
+    data = await s3.getObject(params);
+  } catch (err: unknown) {
+    if (err instanceof S3ServiceException && err.$response) {
+      const { statusCode } = err.$response;
 
-    if (err.code === 'NoSuchKey') {
-      return;
+      if (statusCode === 304) {
+        /*
+         * Make for the client to use cache.
+         */
+        return {
+          statusCode: 304,
+          headers: {},
+        };
+      }
+
+      if (statusCode === 404) {
+        return;
+      }
     }
 
     throw err;
@@ -120,12 +123,24 @@ export async function s3Fetch(event: APIGatewayProxyEventV2, options: S3FetchOpt
 
   const { ContentType } = data;
   let isText: boolean;
+  let body: string | undefined;
 
   if (ContentType) {
     const { type } = parse(ContentType);
     isText = matchMediaType(type, textMediaTypes);
   } else {
     isText = false;
+  }
+
+  if (data.Body) {
+    if (isText) {
+      body = await data.Body.transformToString();
+    } else {
+      const byteArray = await data.Body.transformToByteArray();
+      body = Buffer.from(byteArray).toString('base64');
+    }
+  } else {
+    body = undefined;
   }
 
   return {
@@ -136,7 +151,7 @@ export async function s3Fetch(event: APIGatewayProxyEventV2, options: S3FetchOpt
       'content-type': ContentType!,
       'etag': data.ETag!,
     },
-    body: isText ? data.Body?.toString() : data.Body?.toString('base64'),
+    body,
     isBase64Encoded: !isText,
   };
 }
