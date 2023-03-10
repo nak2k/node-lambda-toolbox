@@ -5,7 +5,7 @@ import {
   CognitoUserPool,
   CognitoUserSession,
 } from "amazon-cognito-identity-js";
-import { SSM } from "aws-sdk";
+import { GetParametersCommand, SSMClient } from "@aws-sdk/client-ssm";
 import {
   COGNITO_USER_ID,
   SSM_PARAM_API_ENDPOINT,
@@ -16,16 +16,16 @@ import {
 import fetch from "node-fetch";
 
 async function getParameters() {
-  const ssm = new SSM();
+  const ssm = new SSMClient({});
 
-  const { Parameters } = await ssm.getParameters({
+  const { Parameters } = await ssm.send(new GetParametersCommand({
     Names: [
       SSM_PARAM_API_ENDPOINT,
       SSM_PARAM_COGNITO_USER_POOL_ID,
       SSM_PARAM_COGNITO_USER_PASSWORD,
       SSM_PARAM_COGNITO_WEB_CLIENT_ID,
     ],
-  }).promise();
+  }));
 
   if (!Parameters) {
     throw new Error("SSM Parameters not found");

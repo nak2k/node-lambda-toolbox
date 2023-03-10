@@ -1,6 +1,8 @@
 import { LambdaRestApi } from "aws-cdk-lib/aws-apigateway";
 import { UserPool, UserPoolClient } from 'aws-cdk-lib/aws-cognito';
-import { CognitoUserPoolUser, DefaultEnvStack, NodejsFunction } from "aws-cdk-util";
+import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
+import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
+import { CognitoUserPoolUser, DefaultEnvStack } from "aws-cdk-util";
 import { Construct } from "constructs";
 import {
   COGNITO_USER_ID, SSM_PARAM_API_ENDPOINT, SSM_PARAM_COGNITO_USER_PASSWORD, SSM_PARAM_COGNITO_USER_POOL_ID,
@@ -43,7 +45,8 @@ export class LambdaToolboxExampleStack extends DefaultEnvStack {
     });
 
     const handler = new NodejsFunction(this, "handler", {
-      packageDirectory: "lambda",
+      runtime: Runtime.NODEJS_18_X,
+      architecture: Architecture.ARM_64,
       environment: {
         USER_POOL_ID: userPool.userPoolId,
         SLACK_CHANNEL: process.env.SLACK_CHANNEL || "",
