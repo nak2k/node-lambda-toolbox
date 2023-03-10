@@ -1,7 +1,7 @@
 import { URL } from 'url';
 import { join, relative } from 'path';
 import { APIGatewayProxyEventV2, APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
-import { GetObjectCommandOutput, S3, S3ServiceException } from '@aws-sdk/client-s3';
+import { GetObjectCommand, GetObjectCommandOutput, S3Client, S3ServiceException } from '@aws-sdk/client-s3';
 import { matchMediaType } from './util';
 import { parse } from 'content-type';
 import { serveStatic } from './serveStatic';
@@ -87,7 +87,7 @@ export async function s3Fetch(event: APIGatewayProxyEventV2, options: S3FetchOpt
     return;
   }
 
-  const s3 = new S3({});
+  const s3 = new S3Client({});
 
   const params = {
     Bucket: bucket,
@@ -98,7 +98,7 @@ export async function s3Fetch(event: APIGatewayProxyEventV2, options: S3FetchOpt
   let data: GetObjectCommandOutput;
 
   try {
-    data = await s3.getObject(params);
+    data = await s3.send(new GetObjectCommand(params));
   } catch (err: unknown) {
     if (err instanceof S3ServiceException && err.$response) {
       const { statusCode } = err.$response;

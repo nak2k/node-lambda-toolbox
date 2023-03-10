@@ -1,4 +1,4 @@
-import { SecretsManager } from '@aws-sdk/client-secrets-manager';
+import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
 
 export interface DatabaseSecret {
   dbClusterIdentifier: string;
@@ -33,15 +33,15 @@ export async function getDatabaseSecret(options: GetDatabaseSecretOptions): Prom
     throw new Error('The secretId option must be specified');
   }
 
-  const secretsManager = new SecretsManager({});
+  const secretsManager = new SecretsManagerClient({});
 
-  return secretsManager.getSecretValue({
+  const data = await secretsManager.send(new GetSecretValueCommand({
     SecretId: secretId,
-  }).then(data => {
-    if (!data.SecretString) {
-      throw new Error('Invalid database secret');
-    }
+  }));
 
-    return JSON.parse(data.SecretString);
-  });
+  if (!data.SecretString) {
+    throw new Error('Invalid database secret');
+  }
+
+  return JSON.parse(data.SecretString);
 }
