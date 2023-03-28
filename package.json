@@ -1,6 +1,6 @@
 {
   "name": "lambda-toolbox",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Utilities for AWS Lambda",
   "author": "Kengo Nakatsuka <kengo.nakatsuka@gmail.com>",
   "bugs": {
