@@ -48,21 +48,20 @@ class Router<Event extends RouterBaseEvent, Result> {
       return;
     }
 
-    const keys: Key[] = [];
-    let re: RegExp;
+    let re: ReturnType<typeof pathToRegexp>;
 
     try {
-      re = pathToRegexp(path, keys);
+      re = pathToRegexp(path);
     } catch (err: any) {
       throw new Error(`Failed to add route for ${method} ${path} (Cause: ${err.message})`);
     }
 
     this._routes.push({
-      keys,
+      keys: re.keys,
       method,
       path,
       lambda,
-      re,
+      re: re.regexp,
     });
   }
 
