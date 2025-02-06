@@ -1,4 +1,6 @@
 import type {
+  APIGatewayEventClientCertificate,
+  APIGatewayEventIdentity,
   APIGatewayProxyEvent,
   APIGatewayProxyEventHeaders,
   APIGatewayProxyEventV2,
@@ -106,6 +108,7 @@ export function toEventV2(event: any): APIGatewayProxyEventV2 {
     requestContext: {
       accountId: requestContext.accountId,
       apiId: requestContext.apiId,
+      authentication: toEventV2Authentication(requestContext.identity),
       authorizer: toEventV2Authorizer(requestContext.authorizer),
       domainName: requestContext.domainName || '',
       domainPrefix: requestContext.domainPrefix || '',
@@ -127,6 +130,17 @@ export function toEventV2(event: any): APIGatewayProxyEventV2 {
     isBase64Encoded,
     stageVariables: nullToUndefined(stageVariables),
   } as APIGatewayProxyEventV2WithJWTAuthorizer;
+}
+
+function toEventV2Authentication(identity: APIGatewayEventIdentity): {
+  clientCert: APIGatewayEventClientCertificate;
+} | undefined {
+  const clientCert = identity?.clientCert;
+  if (!clientCert) {
+    return undefined;
+  }
+
+  return { clientCert };
 }
 
 function toEventV2Authorizer(authorizer: any) {
